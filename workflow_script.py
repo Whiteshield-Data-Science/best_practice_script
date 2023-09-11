@@ -95,6 +95,8 @@ def main():
 
     if git:
         run(['git', 'init', directory])
+        run(['git', 'config', '--local', '--add', 'alias.tree',
+            '''"log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%n' --abbrev-commit --date=relative --branches --tags"'''])
         with open(directory / '.gitignore', 'w') as gitignore:
             gitignore.write("""venv
                 .gitignore
@@ -120,12 +122,12 @@ def main():
         run([python, '-m', 'jupytext', '--set-formats',
             'ipynb,py:percent', 'workbook.ipynb'])
 
-    # TODO: tree = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%n' --abbrev-commit --date=relative --branches --tags
-
     print('\n\n')
     print('**************************************************************')
     print("*** Activate environment with source './venv/bin/activate' ***")
     print("*** Deactivate environment with 'deactivate'               ***")
+    print('***                                                        ***')
+    print("*** git tree command installed                             ***")
 
     if jupyter:
         print('***                                                        ***')
