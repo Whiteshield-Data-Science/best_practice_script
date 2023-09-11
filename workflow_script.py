@@ -120,24 +120,8 @@ def main():
         run([python, '-m', 'jupytext', '--set-formats',
             'ipynb,py:percent', 'workbook.ipynb'])
 
-    """
-    # TODO: jupytext syncing
-
-    # TODO:  Jupyther
-    1. Pasting the following commands into the first field in Jupyther, allows to refere to a python file and the functions in that file are reloaded whenever the file is modified.
-    %load_ext autoreload
-        %autoreload 2
-    3.  This simplies and shortens the error messages (can also go into the first field)
-    %xmode Plain
-    2. In the second file you need to import the according python fire e.G.
-    import src.myfunctions as main
-    from src.myfunctions import *  # new functions need to be called with
-                        # main.function
-
-
     # TODO: tree = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%n' --abbrev-commit --date=relative --branches --tags
 
-    """
     print('\n\n')
     print('**************************************************************')
     print("*** Activate environment with source './venv/bin/activate' ***")
