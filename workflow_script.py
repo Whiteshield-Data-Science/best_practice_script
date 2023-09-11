@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import contextlib
 import sys
 import os
@@ -7,7 +8,7 @@ try:
     import plac
 except ModuleNotFoundError:
     print('Installing workflow_script requirments (plac)')
-    run(args=[sys.executable, '-m', 'pip',  'install', 'plac'])
+    run(args=[sys.executable, '-m', 'pip', 'install', 'plac'])
     print("\nPLEASE RUN SCRIPT AGAIN")
     sys.exit()
 
@@ -80,10 +81,18 @@ def main(name=None, python='python3.11', jupyter=True, pre_commit=True, no_block
             pre_commit_config_yaml.write(pre_commit_config)
         run([python, '-m', 'pre_commit', 'install'])
 
+    if pre_commit and jupyter:
+        with open(directory / '.pre-commit-config.yaml', 'a') as pre_commit_config_yaml:
+            pre_commit_config_yaml.write(pre_commit_hook_jupytext)
+
     if jupyter:
-        run([pip, 'install', 'jupyter', 'ipython'])
+        run([pip, 'install', 'jupyter', 'ipython', 'jupytext'])
         ipython = Path.cwd() / 'venv' / 'bin' / 'ipython'
         run([ipython, 'kernel', 'install', '--user', f'--name={name}'])
+        with open(directory / 'workbook.ipynb', 'w') as ipython_notebook:
+            ipython_notebook.write(jupyter_notebook_template)
+        run([python, '-m', 'jupytext', '--set-formats',
+            'ipynb,py:percent', 'workbook.ipynb'])
 
     """
     # TODO: jupytext syncing
@@ -158,7 +167,76 @@ repos:
         args:
         - --ignore=E501,E122,W503
 
+"""  # noqa
+
+pre_commit_hook_jupytext = """- repo: https://github.com/pycqa/isort
+    rev: 5.11.2
+    hooks:
+    - id: isort
+      args: [--treat-comment-as-code, "# %%", --float-to-top]
+
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.0.275
+  hooks:
+    - id: ruff
+      args: [--fix, --exit-non-zero-on-fix]
+
+-   repo: https://github.com/mwouts/jupytext
+    rev: v1.14.7  # CURRENT_TAG/COMMIT_HASH
+    hooks:
+    - id: jupytext
+      args: [--sync]
+
+
+
 """
+
+jupyter_notebook_template = ("""{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%load_ext autoreload"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "% autoreload 2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "% xmode Plain"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "language_info": {
+   "name": "python"
+  },
+  "orig_nbformat": 4
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}""").replace('\n', '')
 
 
 def yesno(text):
