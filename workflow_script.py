@@ -76,7 +76,7 @@ def main():
             run(['touch', directory / 'requirements.txt'])
             print('close editor window to proceed')
             try:
-                run(['code', '--wait', directory / 'requirements.txt'])
+                run(['code', '--wait', directory / 'requirements.txt'], check=True)
             except FileNotFoundError:
                 with contextlib.suppress(FileNotFoundError):
                     run(['nano', directory / 'requirements.txt'])
