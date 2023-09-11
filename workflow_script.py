@@ -84,17 +84,16 @@ def main():
     else:
         run([pip, 'install', '-r', 'requirements.txt'])
 
-    with open(directory / '.gitignore', 'w') as gitignore:
-        gitignore.write("""venv
-            .gitignore
-            .pre-commit-config.yaml
-            .cache""")
-
     with open(directory / 'venv.sh', 'w') as venvsh:
         venvsh.write('source ./venv/bin/activate\n')
 
     if git:
         run(['git', 'init', directory])
+        with open(directory / '.gitignore', 'w') as gitignore:
+            gitignore.write("""venv
+                .gitignore
+                .pre-commit-config.yaml
+                .cache""")
 
     if precommit:
         run([pip, 'install', 'pre-commit'])
