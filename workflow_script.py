@@ -22,7 +22,7 @@ def main():
 
             'pre_commit' / 'nopre_commit' whether to install precommit
 
-            'norequirments', if you dont want to install requirments
+            'norequirements', if you dont want to install requirements
 
             'nogit', to not install git
 
@@ -49,8 +49,8 @@ def main():
         'jupyter', 'nojupyter', question="Install jupyter?")
     precommit = flag_in_arguments(
         'precommit', 'noprecommit', question="Install pre_commit?")
-    requirments = flag_in_arguments(
-        'requirments', 'norequirments', default=True)
+    requirements = flag_in_arguments(
+        'requirements', 'norequirements', default=True)
     git = flag_in_arguments('git', 'nogit', default=True)
 
     # TODO: 1.	sudo apt-get install python3-venv
@@ -71,7 +71,7 @@ def main():
 
     run([pip, 'install', '--upgrade', 'pip'])
 
-    if requirments:
+    if requirements:
         while True:
             run(['touch', directory / 'requirements.txt'])
             print('close editor window to proceed')
