@@ -4,29 +4,51 @@ import sys
 import os
 from subprocess import run, CalledProcessError
 from pathlib import Path
-try:
-    import plac
-except ModuleNotFoundError:
-    print('Installing workflow_script requirments (plac)')
-    run(args=[sys.executable, '-m', 'pip', 'install', 'plac'])
-    print("\nPLEASE RUN SCRIPT AGAIN")
-    sys.exit()
 
 
-plac.opt('name')
-plac.opt('python')
-plac.flg('jupyter')
-plac.flg('pre_commit')
-plac.flg('no_block')
-plac.flg('git')
+def main():
+    """ This script installs:
+            - a python virtual environment
+            - git (default)
+            - pre-commit (default)
+            - jupyter if jupyter is in given as parameter
+
+        Args:
+            first parameter is the name of the new subdirectory with the python project
+
+            'pythonX.XX' for python version (must be installed on system)
+
+            'jupyter' / 'nojupyter' whether to install jupyter
+
+            'pre_commit' / 'nopre_commit' whether to install precommit
+
+            'norequirments', if you dont want to install requirments
+
+            'nogit', to not install git
+
+        Notes:
+            The virtual environment is installed in basepath 'venv' (e.G. ~/home/davoud/venv/my_project_name)
+            and linked in the project venv subdirectory.
 
 
-def main(name=None, python='python3.11', jupyter=True, pre_commit=True, no_block=False, git=True):
-    if name is None:
+    """
+    if flag_in_arguments('help', 'nohelp', default=False) or '-h' in sys.argv:
+        print(main.__doc__)
+        sys.exit()
+    if len(sys.argv) == 1:
         print('Please enter directory name')
-        name = input()
-        jupyter = yesno("Install jupyter?")
-        pre_commit = yesno("Install pre_commit?")
+    else:
+        name = sys.argv[1]
+
+    python = sys.argv[2] if 'python' in sys.argv[2] else 'python'
+    jupyter = flag_in_arguments(
+        'jupyter', 'nojupyter', question="Install jupyter?")
+    precommit = flag_in_arguments(
+        'precommit', 'noprecommit', question="Install pre_commit?")
+    requirments = flag_in_arguments(
+        'requirments', 'norequirments', default=True)
+    git = flag_in_arguments('git', 'nogit', default=True)
+
     # TODO: 1.	sudo apt-get install python3-venv
 
     directory = Path.cwd() / name
@@ -43,7 +65,7 @@ def main(name=None, python='python3.11', jupyter=True, pre_commit=True, no_block
 
     run([pip, 'install', '--upgrade', 'pip'])
 
-    if not no_block:
+    if requirments:
         while True:
             run(['touch', directory / 'requirements.txt'])
             print('close editor window to proceed')
@@ -74,14 +96,14 @@ def main(name=None, python='python3.11', jupyter=True, pre_commit=True, no_block
     if git:
         run(['git', 'init', directory])
 
-    if pre_commit:
+    if precommit:
         run([pip, 'install', 'pre-commit'])
         pre_commit = directory / 'pre-commit'
         with open(directory / '.pre-commit-config.yaml', 'w') as pre_commit_config_yaml:
             pre_commit_config_yaml.write(pre_commit_config)
         run([python, '-m', 'pre_commit', 'install'])
 
-    if pre_commit and jupyter:
+    if precommit and jupyter:
         with open(directory / '.pre-commit-config.yaml', 'a') as pre_commit_config_yaml:
             pre_commit_config_yaml.write(pre_commit_hook_jupytext)
 
@@ -235,8 +257,20 @@ def yesno(text):
             return False
 
 
-if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        plac.call(main)
+def filter_arguments(arguments):
+    return [arg.replace('-', '').replace('_', '') for arg in arguments]
+
+
+def flag_in_arguments(flag, non_flag, default=None, question=None):
+    if flag in filter_arguments(sys.argv[1:]):
+        return True
+    elif non_flag in filter_arguments(sys.argv[1:]):
+        return False
+    elif default is None:
+        return yesno(question)
     else:
-        main()
+        return default
+
+
+if __name__ == '__main__':
+    main()
