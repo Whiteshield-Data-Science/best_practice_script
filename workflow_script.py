@@ -63,10 +63,10 @@ def main(name=None, python='python3.11', jupyter=True, pre_commit=True, no_block
         run([pip, 'install', '-r', 'requirements.txt'])
 
     with open(directory / '.gitignore', 'w') as gitignore:
-        gitignore.write('venv\n')
-        gitignore.write('.gitignore\n')
-        gitignore.write('.pre-commit-config.yaml\n')
-        gitignore.write('.cache\n')
+        gitignore.write("""venv
+            .gitignore
+            .pre-commit-config.yaml
+            .cache""")
 
     with open(directory / 'venv.sh', 'w') as venvsh:
         venvsh.write('source ./venv/bin/activate\n')
