@@ -8,10 +8,11 @@ from pathlib import Path
 
 def main():
     """ This script installs:
-            - a python virtual environment
-            - git (default)
-            - pre-commit (default)
-            - jupyter if jupyter is in given as parameter
+        - a python virtual environment
+        - git (default)
+        - pre-commit (default)
+        - jupyter if jupyter is in given as parameter
+        - the git tree command, which displays the commit tree
 
         Args:
             first parameter is the name of the new subdirectory with the python project

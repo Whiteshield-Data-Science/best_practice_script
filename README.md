@@ -3,6 +3,7 @@ This script installs:
     - git (default)
     - pre-commit (default)
     - jupyter if jupyter is in given as parameter
+    - the git tree command, which displays the commit tree
 
     Args:
         first parameter is the name of the new subdirectory with the python project
