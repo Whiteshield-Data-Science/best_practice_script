@@ -60,7 +60,9 @@ def main():
     run(['mkdir', directory / 'src'])
     os.chdir(directory)
     run(['mkdir', Path.home() / 'venvs'])
-    run([python, '-m', 'venv', f"{Path.home() / 'venvs' / name}"])
+    if not (Path.home() / 'venvs' / name).exists():
+        run([python, '-m', 'venv',
+            f"{Path.home() / 'venvs' / name}"], check=True)
     run(['ln', '-s', f"{Path.home() / 'venvs' / name}",
         f"{directory / 'venv'}"])
 
