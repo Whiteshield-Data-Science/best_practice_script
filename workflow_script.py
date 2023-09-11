@@ -16,7 +16,7 @@ def main():
         Args:
             first parameter is the name of the new subdirectory with the python project
 
-            'pythonX.XX' for python version (must be installed on system)
+            second parameter (optional) 'pythonX.XX' for python version (must be installed on system)
 
             'jupyter' / 'nojupyter' whether to install jupyter
 
@@ -40,7 +40,11 @@ def main():
     else:
         name = sys.argv[1]
 
-    python = sys.argv[2] if 'python' in sys.argv[2] else 'python'
+    try:
+        python = sys.argv[2] if 'python' in sys.argv[2] else 'python'
+    except IndexError:
+        python = 'python'
+
     jupyter = flag_in_arguments(
         'jupyter', 'nojupyter', question="Install jupyter?")
     precommit = flag_in_arguments(
