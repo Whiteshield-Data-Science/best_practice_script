@@ -44,6 +44,7 @@ def main(name=None, python='python3.11', jupyter=True, pre_commit=True, no_block
 
     if not no_block:
         while True:
+            run(['touch', directory / 'requirements.txt'])
             print('close editor window to proceed')
             try:
                 run(['code', '--wait', directory / 'requirements.txt'])
