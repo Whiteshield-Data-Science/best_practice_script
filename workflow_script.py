@@ -169,26 +169,12 @@ repos:
 
 """  # noqa
 
-pre_commit_hook_jupytext = """- repo: https://github.com/pycqa/isort
-    rev: 5.11.2
-    hooks:
-    - id: isort
-      args: [--treat-comment-as-code, "# %%", --float-to-top]
-
-- repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.0.275
-  hooks:
-    - id: ruff
-      args: [--fix, --exit-non-zero-on-fix]
-
+pre_commit_hook_jupytext = """
 -   repo: https://github.com/mwouts/jupytext
-    rev: v1.14.7  # CURRENT_TAG/COMMIT_HASH
+    rev: 'v1.14.7'
     hooks:
     - id: jupytext
       args: [--sync]
-
-
-
 """
 
 jupyter_notebook_template = ("""{
@@ -208,7 +194,7 @@ jupyter_notebook_template = ("""{
    "metadata": {},
    "outputs": [],
    "source": [
-    "% autoreload 2"
+    "%autoreload 2"
    ]
   },
   {
@@ -217,7 +203,7 @@ jupyter_notebook_template = ("""{
    "metadata": {},
    "outputs": [],
    "source": [
-    "% xmode Plain"
+    "%xmode Plain"
    ]
   },
   {
