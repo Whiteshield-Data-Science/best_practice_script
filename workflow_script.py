@@ -97,7 +97,6 @@ def main():
 
     if precommit:
         run([pip, 'install', 'pre-commit'])
-        pre_commit = directory / 'pre-commit'
         with open(directory / '.pre-commit-config.yaml', 'w') as pre_commit_config_yaml:
             pre_commit_config_yaml.write(pre_commit_config)
         run([python, '-m', 'pre_commit', 'install'])
