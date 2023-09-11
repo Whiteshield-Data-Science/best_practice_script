@@ -100,6 +100,7 @@ def main(name=None, python='python3.11', jupyter=True, pre_commit=True, no_block
                         # main.function
 
 
+    # TODO: tree = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%n' --abbrev-commit --date=relative --branches --tags
 
     """
     print('\n\n')
